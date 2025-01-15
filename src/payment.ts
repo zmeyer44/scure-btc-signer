@@ -177,6 +177,21 @@ const OutTRMS: Coder<OptScript, OutTRMSType | undefined> = {
   },
 };
 
+// Pay to Anchor (P2A)
+type OutP2AType = { type: 'p2a' };
+const OutP2A: Coder<OptScript, OutP2AType | undefined> = {
+  encode(from: ScriptType): OutP2AType | undefined {
+    if (from.length !== 2 || from[0] !== 1 || !u.isBytes(from[1]) || hex.encode(from[1]) !== '4e73')
+      return;
+    return { type: 'p2a' };
+  },
+  decode: (to: OutP2AType): OptScript => {
+    if (to.type !== 'p2a') return;
+    const out: ScriptType = [1, hex.decode('4e73')];
+    return out;
+  },
+};
+
 // Unknown output type
 type OutUnknownType = { type: 'unknown'; script: Bytes };
 const OutUnknown: Coder<OptScript, OutUnknownType | undefined> = {
@@ -189,6 +204,7 @@ const OutUnknown: Coder<OptScript, OutUnknownType | undefined> = {
 // /Payments
 
 const OutScripts = [
+  OutP2A,
   OutPK,
   OutPKH,
   OutSH,
