@@ -242,6 +242,7 @@ export type CustomScript = Coder<OptScript, CustomScriptOut | undefined> & {
 // We can validate this once, because of packed & coders
 export const OutScript: P.CoderType<
   NonNullable<
+    | OutP2AType
     | OutPKType
     | OutPKHType
     | OutSHType
